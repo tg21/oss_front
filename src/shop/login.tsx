@@ -1,7 +1,9 @@
 // import react from 'react'
 import axios from 'axios';
 import React, { useCallback, useEffect, useReducer } from 'react'
+import { useHistory } from 'react-router';
 import { Row, Col,InputGroup,InputGroupAddon,InputGroupText,Input,Container } from 'reactstrap'
+import { isGetAccessorDeclaration } from 'typescript';
 
 class User{
     username:string;
@@ -83,7 +85,7 @@ axios.defaults.xsrfCookieName = 'csrftoken'
 axios.defaults.xsrfHeaderName = 'X-CSRFToken'
 var csrftoken = getCookie('csrftoken');
 
-const login = async (user:User) =>{
+const login = async (user:User,gotToHome:VoidFunction) =>{
     try{
      const req = await axios.post('http://localhost:8000/shop/login',user,
     //  {
@@ -96,10 +98,19 @@ const login = async (user:User) =>{
     //  }
      );
      console.log(req);
-     alert(req)
+     var data = req.data;
+     if(data.data == 'authorized'){
+         alert('Login Successful');
+         //
+        //  window.location.href = "/";
+        //history.replace("/");
+        gotToHome();
+     }else{
+        alert('Login Unsuccessful');
+     }
     } catch (error) {
         console.error(error);
-        alert(error)
+        alert('Login Unsuccessful');
     }
 }
     
@@ -107,6 +118,7 @@ export const AuthScreen = () => {
 
     
     const [userState,userDispatch] = useReducer(userReducer,user);
+    const history = useHistory();
     const userUpdater = (event:React.ChangeEvent<HTMLInputElement>,action:userActionsType) =>
         userDispatch({type:action,payload:valueFromEvent(event)});
     // const userUpdater = useCallback((event:React.ChangeEvent<HTMLInputElement>,action:userActionsType) => {
@@ -140,7 +152,7 @@ export const AuthScreen = () => {
                         </InputGroupAddon>
                         <Input value={userState.password} type="password" onChange={(e) =>{userUpdater(e,userActions.setPass)}}  placeholder="password" />
                     </InputGroup>
-                    <button onClick={()=>login(userState)} className="btn btn-warning text-dark mt-3" >Login</button>
+                    <button onClick={()=>login(userState,()=>history.replace("/"))} className="btn btn-warning text-dark mt-3" >Login</button>
                 {/* </Container> */} 
                 </Col>
             </Row>

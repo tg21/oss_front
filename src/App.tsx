@@ -3,10 +3,33 @@ import logo from './logo.svg';
 import { Counter } from './features/counter/Counter';
 import './App.css';
 import { AuthScreen } from './shop/login';
+import { Route, BrowserRouter, Switch, Redirect } from 'react-router-dom';
+import { HomeScreen, Topic } from './shop/home';
+
+
+function Layouts() {
+  return (
+    <Switch>
+      <Route path="/auth" component={AuthScreen} />
+      <Route path="/home" component={HomeScreen} />
+      <Redirect from="/" to="/auth" exact />
+      {/* <Route path="/" component={NotFound} /> */}
+    </Switch>
+  );
+}
+
 
 function App() {
   return (
-    <AuthScreen/>
+    <BrowserRouter>
+    <Layouts/>
+      {/* <Switch>
+        <Route exact path="/home" component={HomeScreen}></Route>
+        <Route exact path="/Components"><Topic/></Route>
+        <Route path="/login"><AuthScreen/></Route>
+      </Switch> */}
+    </BrowserRouter>
+    // <AuthScreen/>
     // <div className="App">
     //   <header className="App-header">
     //     <img src={logo} className="App-logo" alt="logo" />
