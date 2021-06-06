@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Link, useRouteMatch } from 'react-router-dom';
 import {
   Collapse,
@@ -14,11 +15,15 @@ import {
   DropdownItem,
   NavbarText
 } from 'reactstrap';
+import { AuthState } from '../../state/auth/authTypes';
+import { stateType } from '../../state/store';
 
 export const ShopNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   let { path, url } = useRouteMatch();
-  console.log(path,url);
+  const authState:AuthState = useSelector((state:stateType) => state.auth);
+  // console.warn(authState);
+  // console.log(path,url);
 
   const toggle = () => setIsOpen(!isOpen);
 
@@ -53,7 +58,7 @@ export const ShopNavbar = () => {
               </DropdownMenu>
             </UncontrolledDropdown>
           </Nav>
-          <NavbarText>Simple Text</NavbarText>
+          <NavbarText>{authState.first_name.toUpperCase() + " " + authState.last_name.toUpperCase()}</NavbarText>
         </Collapse>
       </Navbar>
     </div>

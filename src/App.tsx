@@ -1,6 +1,6 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
+// import React from 'react';
+// import logo from './logo.svg';
+// import { Counter } from './features/counter/Counter';
 import './App.css';
 import { AuthScreen } from './shop/login';
 import { Route, BrowserRouter, Switch, Redirect } from 'react-router-dom';
