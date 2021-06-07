@@ -4,7 +4,7 @@
 import './App.css';
 import { AuthScreen } from './shop/login';
 import { Route, BrowserRouter, Switch, Redirect } from 'react-router-dom';
-import { HomeScreen, Topic } from './shop/home';
+import { HomeScreen} from './shop/home';
 
 
 function Layouts() {

@@ -1,6 +1,7 @@
+import { Console } from 'console';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Link, useRouteMatch } from 'react-router-dom';
+import { Link, useHistory, useRouteMatch } from 'react-router-dom';
 import {
   Collapse,
   Navbar,
@@ -21,44 +22,44 @@ import { stateType } from '../../state/store';
 export const ShopNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   let { path, url } = useRouteMatch();
-  const authState:AuthState = useSelector((state:stateType) => state.auth);
+  const authState: AuthState = useSelector((state: stateType) => state.auth);
   // console.warn(authState);
+  const history = useHistory();
+  if (authState.role == undefined || authState.role == null || authState.role == "") {
+    history.replace('/auth');
+  }
   // console.log(path,url);
 
   const toggle = () => setIsOpen(!isOpen);
 
   return (
-    <div className="bg-light p-3">
-      <Navbar color="light" light expand="md">
-        <NavbarBrand href="/">OSS</NavbarBrand>
+    <div className="bg-warning p-3">
+      <Navbar color="waring text-dark font-wight-bold" light expand="md">
+        <Link className="ms-2 navbar-brand" to="/home"><h3>OSS</h3></Link>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
-          <Nav className="mr-auto" navbar>
-            <NavItem>
-            <Link className="nav-link" to={`${url}/Display`}>Display</Link>
-            </NavItem>
-            <NavItem>
-            <Link className="nav-link" to={`${url}/Inventory`}>Inventory</Link>
-            </NavItem>
-            <UncontrolledDropdown nav inNavbar>
+          <Nav className="w-100" navbar>
+            {authState.role == 'seller' && <NavItem>
+            <Link className="nav-link me-auto" to={`${url}/store`}>Store</Link>
+            </NavItem>}
+            <UncontrolledDropdown className='ms-auto' nav inNavbar>
               <DropdownToggle nav caret>
-                Options
+              {authState.first_name?.toUpperCase() + " " + authState.last_name?.toUpperCase()}
               </DropdownToggle>
               <DropdownMenu right>
                 <DropdownItem>
-                  Option 1
+                  My Orders
                 </DropdownItem>
                 <DropdownItem>
-                  Option 2
+                  My Cart
                 </DropdownItem>
                 <DropdownItem divider />
-                <DropdownItem>
-                  Reset
+                <DropdownItem onClick={()=>alert('bye')}>
+                  Logout
                 </DropdownItem>
               </DropdownMenu>
             </UncontrolledDropdown>
           </Nav>
-          <NavbarText>{authState.first_name.toUpperCase() + " " + authState.last_name.toUpperCase()}</NavbarText>
         </Collapse>
       </Navbar>
     </div>
